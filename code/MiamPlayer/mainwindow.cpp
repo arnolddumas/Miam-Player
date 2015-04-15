@@ -315,6 +315,7 @@ void MainWindow::setupActions()
 			_equalizerDialog = new EqualizerDialog;
 		}
 		_equalizerDialog->show();
+		_equalizerDialog->activateWindow();
 	});
 
 	// Sliders
