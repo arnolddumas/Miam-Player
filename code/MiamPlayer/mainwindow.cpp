@@ -16,7 +16,7 @@
 #include <QtDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
-	QMainWindow(parent)
+	QMainWindow(parent), _equalizerDialog(NULL)
 {
 	setupUi(this);
 	widgetSearchBar->setFrameBorder(false, true, true, false);
@@ -309,6 +309,14 @@ void MainWindow::setupActions()
 	connect(skipForwardButton, &QAbstractButton::clicked, mp, &MediaPlayer::skipForward);
 	connect(playbackModeButton, &MediaButton::mediaButtonChanged, playbackModeWidgetFactory, &PlaybackModeWidgetFactory::update);
 
+	// Equalizer
+	connect(actionShowEqualizer, &QAction::triggered, this, [=]() {
+		if (!_equalizerDialog) {
+			_equalizerDialog = new EqualizerDialog;
+		}
+		_equalizerDialog->show();
+	});
+
 	// Sliders
 	connect(mp, &MediaPlayer::positionChanged, [=] (qint64 pos, qint64 duration) {
 		if (duration > 0) {
@@ -404,7 +412,6 @@ void MainWindow::setupActions()
 
 	connect(qApp, &QApplication::aboutToQuit, this, [=] {
 		delete PluginManager::instance();
-		//SettingsPrivate *settings = SettingsPrivate::instance();
 		settings->setValue("mainWindowGeometry", saveGeometry());
 		settings->setValue("leftTabsIndex", leftTabs->currentIndex());
 		settings->setLastActivePlaylistGeometry(tabPlaylists->currentPlayList()->horizontalHeader()->saveState());

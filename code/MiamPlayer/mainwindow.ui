@@ -630,6 +630,8 @@
     <addaction name="actionMute"/>
     <addaction name="actionIncreaseVolume"/>
     <addaction name="actionDecreaseVolume"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowEqualizer"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -919,6 +921,11 @@
    </property>
    <property name="text">
     <string>&amp;Stop</string>
+   </property>
+  </action>
+  <action name="actionShowEqualizer">
+   <property name="text">
+    <string>Show equalizer...</string>
    </property>
   </action>
  </widget>

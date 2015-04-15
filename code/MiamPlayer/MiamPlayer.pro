@@ -11,6 +11,7 @@ SOURCES += \
     dialogs/customizethemedialog.cpp \
     dialogs/customizethemetaglineedit.cpp \
     dialogs/dragdropdialog.cpp \
+    dialogs/equalizerdialog.cpp \
     dialogs/playlistmanager.cpp \
     dialogs/reflector.cpp \
     dialogs/searchdialog.cpp \
@@ -50,6 +51,7 @@ SOURCES += \
     qtsingleapplication/qtsinglecoreapplication.cpp \
     styling/imageutils.cpp \
     styling/lineedit.cpp \
+    styling/miamslider.cpp \
     styling/miamstyleditemdelegate.cpp \
     tageditor/albumcover.cpp \
     tageditor/tagconverter.cpp \
@@ -82,9 +84,10 @@ HEADERS += \
     dialogs/customizethemedialog.h \
     dialogs/customizethemetaglineedit.h \
     dialogs/dragdropdialog.h \
+    dialogs/equalizerdialog.h \
     dialogs/playlistmanager.h \
-    dialogs/reflector.h \
     dialogs/paintablewidget.h \
+    dialogs/reflector.h \
     dialogs/searchdialog.h \
     filesystem/addressbar.h \
     filesystem/addressbarbutton.h \
@@ -124,6 +127,7 @@ HEADERS += \
     qtsingleapplication/qtsinglecoreapplication.h \
     styling/imageutils.h \
     styling/lineedit.h \
+    styling/miamslider.h \
     styling/miamstyleditemdelegate.h \
     tageditor/albumcover.h \
     tageditor/tagconverter.h \
@@ -157,7 +161,8 @@ FORMS += closeplaylistpopup.ui \
     quickstart.ui \
     tagconverter.ui \
     tageditor.ui \
-    searchdialog.ui
+    searchdialog.ui \
+    equalizerdialog.ui
 
 RESOURCES += mp.qrc
 
@@ -193,10 +198,10 @@ TRANSLATIONS = translations/m4p_ar.ts \
 CONFIG(debug, debug|release) {
     win32 {
 	!contains(QMAKE_TARGET.arch, x86_64) {
-	    LIBS += -L$$PWD/../../lib/debug/win-x86/ -ltag -L$$OUT_PWD/../MiamCore/debug/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/debug/ -lMiamUniqueLibrary
+	    LIBS += -L$$PWD/../../lib/debug/win-x86/ -ltag -L$$PWD/../../lib/debug/win-x86/vlc-qt/ -lvlc-qt -lvlc-qt-widgets -L$$OUT_PWD/../MiamCore/debug/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/debug/ -lMiamUniqueLibrary
 	    QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$PWD/mp.ico) $$shell_path($$OUT_PWD/debug/)
 	} else {
-	    LIBS += -L$$PWD/../../lib/debug/win-x64/ -ltag -L$$OUT_PWD/../MiamCore/debug/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/debug/ -lMiamUniqueLibrary
+	    LIBS += -L$$PWD/../../lib/debug/win-x64/ -ltag -L$$PWD/../../lib/release/win-x86/vlc-qt/ -lvlc-qt -lvlc-qt-widgets -L$$OUT_PWD/../MiamCore/debug/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/debug/ -lMiamUniqueLibrary
 	    QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$PWD/mp.ico) $$shell_path($$OUT_PWD/debug/)
 	}
     }
@@ -209,10 +214,10 @@ CONFIG(debug, debug|release) {
 CONFIG(release, debug|release) {
     win32 {
 	!contains(QMAKE_TARGET.arch, x86_64) {
-	    LIBS += -L$$PWD/../../lib/release/win-x86/ -ltag -L$$OUT_PWD/../MiamCore/release/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/release/ -lMiamUniqueLibrary
+	    LIBS += -L$$PWD/../../lib/release/win-x86/ -ltag -L$$PWD/../../lib/release/win-x64/vlc-qt/ -lvlc-qt -lvlc-qt-widgets -L$$OUT_PWD/../MiamCore/release/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/release/ -lMiamUniqueLibrary
 	    QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$PWD/mp.ico) $$shell_path($$OUT_PWD/release/)
 	} else {
-	    LIBS += -L$$PWD/../../lib/release/win-x64/ -ltag -L$$OUT_PWD/../MiamCore/release/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/release/ -lMiamUniqueLibrary
+	    LIBS += -L$$PWD/../../lib/release/win-x64/ -ltag -L$$PWD/../../lib/release/win-x64/vlc-qt/ -lvlc-qt -lvlc-qt-widgets -L$$OUT_PWD/../MiamCore/release/ -lMiamCore -L$$OUT_PWD/../MiamUniqueLibrary/release/ -lMiamUniqueLibrary
 	    QMAKE_POST_LINK += $${QMAKE_COPY} $$shell_path($$PWD/mp.ico) $$shell_path($$OUT_PWD/release/)
 	}
     }
@@ -222,12 +227,12 @@ CONFIG(release, debug|release) {
     UI_DIR = $$PWD
 }
 unix:!macx {
-    LIBS += -ltag -L$$OUT_PWD/../MiamCore/ -lmiam-core -L$$OUT_PWD/../MiamUniqueLibrary/ -lmiam-uniquelibrary
+    LIBS += -ltag -lvlc-qt -lvlc-qt-widgets -L$$OUT_PWD/../MiamCore/ -lmiam-core -L$$OUT_PWD/../MiamUniqueLibrary/ -lmiam-uniquelibrary
     target.path = /usr/bin/
     INSTALLS += target
 }
 macx {
-    LIBS += -L$$PWD/../../lib/ -ltag -L$$OUT_PWD/../MiamCore/ -lmiam-core -L$$OUT_PWD/../MiamUniqueLibrary/ -lmiam-uniquelibrary
+    LIBS += -L$$PWD/../../lib/ -ltag -lvlc-qt -lvlc-qt-widgets -L$$OUT_PWD/../MiamCore/ -lmiam-core -L$$OUT_PWD/../MiamUniqueLibrary/ -lmiam-uniquelibrary
     ICON = $$PWD/mp.icns
     QMAKE_INFO_PLIST = $$PWD/../../packaging/osx/Info.plist
     #1 create Framework directory

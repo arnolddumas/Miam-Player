@@ -9,6 +9,7 @@
 #include <mediaplayer.h>
 #include "dialogs/customizeoptionsdialog.h"
 #include "dialogs/dragdropdialog.h"
+#include "dialogs/equalizerdialog.h"
 #include "dialogs/playlistmanager.h"
 #include "library/librarytreeview.h"
 #include "playbackmodewidgetfactory.h"
@@ -42,6 +43,8 @@ private:
 	UniqueLibrary *_uniqueLibrary;
 
 	SearchDialog *_searchDialog;
+
+	EqualizerDialog *_equalizerDialog;
 
 public:
 	// Play, pause, stop, etc.
